@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Kat Sans | Registro cliente">
+    <meta name="author" content="@primooo326">
+
+    <!-- Title Page-->
+    <title>Kat Sans | Registro</title>
+
+    <!-- Icons font CSS-->
+    <link href="vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+    <link href="vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i"
+        rel="stylesheet">
+
+    <!-- Vendor CSS-->
+    <link href="vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="vendor/datepicker/daterangepicker.css" rel="stylesheet" media="all">
+    <link rel="shortcut icon" href="gato.png" type="image/x-icon">
+    <!-- Main CSS-->
+    <link href="css/main.css" rel="stylesheet" media="all">
+</head>
+
+<body>
+    <div class="page-wrapper bg-gra-03 p-t-45 p-b-50">
+        <div class="wrapper wrapper--w790">
+            <div class="card card-5">
+                <div class="card-heading">
+                    <h2 class="title">Kat Sans Registro Cliente</h2>
+                </div>
+                <div class="card-body">
+                    <form id="form">
+                        <div class="form-row">
+                            <div class="name">Nombre</div>
+                            <div class="value">
+                                <div class="input-group-desc">
+                                    <input id="nombre" class="input--style-5" type="text" autocomplete="name"
+                                        autocapitalize="true" autofocus name="nombre">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">WhatsApp</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input id="whatsapp" class="input--style-5" autocomplete="tel" type="text"
+                                        name="telefono">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">¿Cual es tu dirección?</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input id="direccion" class="input--style-5" autocomplete="address-line1"
+                                        type="text" name="direccion">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">¿Cuantos gatos tienes?</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input id="gatos" class="input--style-5" type="number" min="1" name="animalesCount">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row p-t-20">
+                            <label class="label label--block"><small>Entiendo y acepto que mis datos personales,
+                                    incluyendo nombre, dirección, número de WhatsApp y el número de gatos en mi
+                                    hogar, serán recopilados con el único propósito de mejorar el servicio y recibir
+                                    arena para gato a mi domicilio. Acepto
+                                    que estos datos serán tratados de manera confidencial y segura, cumpliendo con las
+                                    <a href="https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=49981"
+                                        target="_blank" rel="noopener noreferrer">leyes y regulaciones de privacidad
+                                        aplicables.</a> Asimismo, comprendo que tengo el derecho de acceder, corregir o
+                                    eliminar
+                                    mis datos personales si así lo
+                                    deseo.</small></label>
+                            <div class="p-t-15">
+                                <label class="radio-container m-r-55">Si
+                                    <input id="check-si" type="radio" checked="checked" name="exist">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="radio-container">No
+                                    <input id="check-no" type="radio" name="exist">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn--radius-2 btn--red" disabled type="submit">Aceptar</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/select2/select2.min.js"></script>
+    <script src="vendor/datepicker/moment.min.js"></script>
+    <script src="vendor/datepicker/daterangepicker.js"></script>
+    <script src="js/global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        // Cuando el DOM esté listo
+        $(document).ready(function () {
+            const nombreInput = $("#nombre");
+            const whatsappInput = $("#whatsapp");
+            const direccionInput = $("#direccion");
+            const gatosInput = $("#gatos");
+            const checkSi = $("#check-si");
+            const checkNo = $("#check-no");
+            const botonAceptar = $("button[type='submit']");
+
+            // Agregar un event listener a los campos para escuchar cambios en los valores
+            nombreInput.on("input", validarFormulario);
+            whatsappInput.on("input", validarFormulario);
+            direccionInput.on("input", validarFormulario);
+            gatosInput.on("input", validarFormulario);
+            checkSi.on("change", validarFormulario);
+            checkNo.on("change", validarFormulario);
+
+            // Función para validar el formulario
+            function validarFormulario() {
+                // Verificar si los campos están llenos y el checkbox está seleccionado
+                const nombreValido = nombreInput.val().trim() !== "";
+                const whatsappValido = whatsappInput.val().trim() !== "";
+                const direccionValida = direccionInput.val().trim() !== "";
+                const gatosValidos = gatosInput.val() >= 1;
+                const checkboxSeleccionado = checkSi.is(":checked");
+
+                // Habilitar o deshabilitar el botón "Aceptar" según la validez de los campos
+                if (nombreValido && whatsappValido && direccionValida && gatosValidos && checkboxSeleccionado) {
+                    botonAceptar.prop("disabled", false);
+                    checkNo.prop("checked", false);
+                } else {
+                    botonAceptar.prop("disabled", true);
+                    checkNo.prop("checked", true);
+                }
+
+                // Si el check-si está marcado, el check-no debe estar desmarcado y viceversa
+                if (checkSi.is(":checked")) {
+                    checkNo.prop("checked", false);
+                } else if (checkNo.is(":checked")) {
+                    checkSi.prop("checked", false);
+                }
+            }
+
+            // Llamar a la función de validación inicialmente
+            validarFormulario();
+        });
+
+        const miFormulario = $("#form");
+
+        miFormulario.on("submit", function (event) {
+            event.preventDefault(); // Previene la acción por defecto del formulario (redirección)
+
+            // Obtener los datos del formulario
+            const formData = miFormulario.serialize();
+
+            // Realizar la petición AJAX (Aquí debes reemplazar "url_del_servidor" con la URL a la que quieres enviar los datos)
+            $.ajax({
+                type: "POST", // Puedes cambiar a "GET" o el método que desees
+                // url: "http://localhost:4040/api/clientes/createCliente",
+                url: "http://gato.pruebawp.cymetria.com/api/clientes/createCliente",
+                data: formData,
+                success: function (response) {
+                    // Aquí puedes manejar la respuesta del servidor si lo deseas
+
+                    Swal.fire({
+                        imageUrl: 'gato.png',
+                        imageAlt: 'A tall image',
+                        imageWidth: 100,
+                        title: '<strong>Kat Sans</strong>',
+                        icon: 'success',
+                        html: 'Datos enviados correctamente, ya puedes cerrar esta página.',
+                    })
+                },
+
+                error: function (xhr, status, error) {
+                    // Aquí puedes manejar un error en la petición si ocurre
+                    Swal.fire(
+                        'Kat Sans',
+                        "Error al enviar los datos",
+                        'error'
+                    )
+                }
+            });
+        });
+
+    </script>
+</body>
+
+</html>
